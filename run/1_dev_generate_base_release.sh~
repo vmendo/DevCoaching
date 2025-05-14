@@ -1,0 +1,203 @@
+#!/bin/bash
+
+# Set Oracle Wallet Location (if needed)
+export TNS_ADMIN=/home/opc/DevCoaching/wallet/dev
+
+# Define colors
+BLUE='\033[34m'
+RED='\033[31m'
+GREEN='\033[32m'
+NC='\033[0m' # No color (reset)
+
+# Check if the project folder already exists
+if [ -d "/home/opc/DevCoaching/my_projects/hr" ]; then
+    echo -e "${RED}ERROR: The folder /home/opc/DevCoaching/my_projects/hr already exists!${NC}"
+    echo -e "${RED}Please remove it manually.${NC}"
+    exit 1
+fi
+
+echo -e "${BLUE}Moving to the project directory: /home/opc/DevCoaching/my_projects ${NC}"
+cd /home/opc/DevCoaching/my_projects/
+
+echo -e "${BLUE}Initializing the project..."
+echo -e "${GREEN}sql /nolog${NC}"
+echo -e "${RED}project init -name hr -schemas HR -makeroot${NC}"
+echo ""
+read -p "Press any key to execute..." -n 1 -s
+echo ""
+
+sql /nolog <<EOF
+project init -name hr -schemas HR -makeroot
+exit
+EOF
+
+echo -e "${BLUE}Moving into the newly created project folder: /home/opc/iDevCoaching/my_projects/hr${NC}"
+cd hr
+
+echo -e "${BLUE}Displaying project folder structure...${NC}"
+tree -a
+
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+echo -e "${BLUE}SQL Projects use filters to manage database objects to be included in this project${NC}"
+echo -e "${BLUE}We can edit the project.filters file to avoid exporting grants ${NC}"
+echo -e "${BLUE}   /home/opc/DevCoaching/my_projects/hr/.dbtools/filters/project.filters${NC}"
+echo -e "${RED}   - Uncomment: export_type not in ... USER_SYS_PRIVS${NC}"
+
+read -p "Press any key to continue after making the changes..." -n 1 -s
+echo ""
+
+rm /home/opc/DevCoaching/my_projects/hr/.dbtools/filters/project.filters
+cp /home/opc/DevCoaching/aux/project.filters /home/opc/DevCoaching/my_projects/hr/.dbtools/filters/project.filters
+
+echo -e "${BLUE}We will use Github as code repository.${NC}"
+echo -e "${BLUE}  Initializing Git repository, adding the project files and committing...${NC}"
+echo -e "${GREEN}    git init --initial-branch=main${NC}"
+echo -e "${GREEN}    git add .${NC}" 
+echo -e "${GREEN}    git commit -m 'chore: initializing repository with default project files'${NC}"
+echo ""
+echo -e "${BLUE} We will push the changes to the repository${NC}"
+echo -e "${GREEN}    git remote add origin https://github.com/vmendo/my_hr_demo.git'${NC}"
+echo -e "${GREEN}    git push -u origin main'${NC}"
+echo ""
+read -p "Press any key to run the commands"  -n 1 -s
+echo ""
+
+git init --initial-branch=main
+git add .
+git commit -m "chore: initializing repository with default project files"
+
+
+git remote add origin https://github.com/vmendo/my_hr_demo.git
+git push -u origin main --force
+
+echo -e "${BLUE}The project structure has been committed to the code repository. Now we will:${NC}" 
+echo -e "${BLUE}  1-. Create a new branch, extract the DB objects and APEX application${NC}" 
+echo -e "${BLUE}  2-. Add them to the code repository${NC}" 
+echo -e "${BLUE}  3-. Generate the changelogs comparing this branch vs main.${NC}" 
+echo -e "${BLUE}  4-. Add some custom code to populate the database tables.${NC}"
+echo -e "${BLUE}  5-. Close the changes to be included in this release.${NC}" 
+echo -e "${BLUE}  6-. Generate the artifact Zip file we will use to migrate the app to production${NC}" 
+echo ""
+echo ""
+echo -e "${BLUE}1-. Create a new branch, extract the DB objects and APEX application${NC}"
+echo -e "${GREEN}      git checkout -b base-release${NC}"
+echo -e "${RED}      project export${NC}"
+echo ""
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+git checkout -b base-release
+sql -name hr_dev <<EOF
+project export
+exit
+EOF
+tree
+
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+echo -e "${BLUE}2-. Adding the source code to the Git repository...${NC}"
+echo -e "${GREEN}    git add src${NC}"
+echo -e "${GREEN}    git commit -m 'chore: base export of sample app and tables'${NC}"
+echo ""
+read -p "Press any key to execute..."  -n 1 -s
+echo ""
+
+git add src
+git commit -m "chore: base export HR database application"
+
+echo -e "${BLUE}3-. Generate the changelogs comparing this branch vs main${NC}"
+echo -e "${RED}    project stage${NC}"
+echo ""
+read -p "Press any key to execute..."  -n 1 -s
+echo ""
+
+sql -name hr_dev <<EOF
+project stage -verbose
+exit
+EOF
+tree
+
+echo ""
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+echo -e "${BLUE}4-. We can add custom code that we may want to run in production.${NC}"
+echo -e "${BLUE}    In this demo, we will use custom code to add some samplle data in our tables${NC}"
+echo -e "${BLUE}    We will use the project stage add-custom${NC}"
+echo -e "${RED}    project stage add-custom -file-name eba_demo_file_projects_data.sql${NC}"
+echo ""
+read -p "Press any key to execute..."  -n 1 -s
+echo ""
+
+sql -name hr_dev  <<EOF
+project stage add-custom -file-name populate_tables_with_demo_data.sql
+exit
+EOF
+tree
+
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+echo -e "${BLUE}The generated file contains only the Liquibase annotations, we need to add the SQL code manually${NC}"
+echo -e "${BLUE}   I will run a OS script to add the sql to this file${NC}"
+echo ""
+read -p "Press any key to execute..."  -n 1 -s
+echo ""
+
+cd /home/opc/DevCoaching/aux/custom 
+./append_base_release_sql_files.sh
+cd /home/opc/DevCoaching/my_projects/hr
+
+echo -e "${BLUE}   Now, the changelog filescontains the SQL code to populate the application tables  ${NC}"
+echo ""
+read -p "Press any key to execute..."  -n 1 -s
+echo ""
+
+echo -e "${BLUE}5-. Close the changes to be included in this release.${NC}"
+echo -e "${RED}    project release -version 1.0 -verbose${NC}"
+echo ""
+read -p "Press any key to execute..." -n 1 -s
+echo ""
+
+sql -name hr_dev <<EOF
+project release -version 1.0 -verbose
+exit
+EOF
+tree
+
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+echo -e "${BLUE}6-. Generate the artifact Zip file we will use to migrate the app to production${NC}"
+echo -e "${RED}    project gen-artifact -name hr -version 1.0 -format zip -verbose${NC}"
+echo ""
+read -p "Press any key to execute..." -n 1 -s
+echo ""
+
+sql -name hr_dev <<EOF
+project gen-artifact -name hr -version 1.0 -format zip -verbose
+exit
+EOF
+tree
+
+echo ""
+read -p "Press any key to execute..." -n 1 -s
+echo ""
+
+echo -e "${RED}The artifact for the base relase is ready!!!${NC}"
+echo -e "${BLUE}  We will psuh the artifact to Github ${NC}"
+echo -e "${GREEN}    gh release create v1.0 artifact/hr-1.0.zip \${NC}"
+echo -e "${GREEN}      --title 'Version 1.0' \${NC}"
+echo -e "${GREEN}       --notes 'Base release for the HR database application"
+
+gh release create v1.0 artifact/hr-1.0.zip \
+  --title "Version 1.0" \
+  --notes "Base release for the HR database application"
+
+
+
+echo -e "${BLUE}Now, we can proceed to deploy it in the production environment${NC}"
+

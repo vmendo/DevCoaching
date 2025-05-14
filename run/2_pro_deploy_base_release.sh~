@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# Set Oracle Wallet Location (if needed)
+export TNS_ADMIN=/home/opc/dbcicd/wallet/wallet_23ai_pro
+
+# Define colors
+BLUE='\033[34m'
+RED='\033[31m'
+GREEN='\033[32m'
+NC='\033[0m' # No color (reset)
+
+echo -e "${BLUE}Listing the current APEX applications in the production environment: ${NC}"
+read -p "Press any key to check existing APEX apps..." -n 1 -s
+echo ""
+
+sql /nolog <<EOF
+connect -name apex_pro
+apex list
+exit
+EOF
+
+echo ""
+echo -e "${BLUE}You can validate this list in the APEX UI${NC}"
+read -p "Press any key to continue..." -n 1 -s
+echo ""
+
+echo -e "${BLUE}Also, We can list the existing tables in APEX workspace: ${NC}"
+echo -e "${BLUE}Running ${GREEN}tables; ${BLUE}connected to the production database${NC}"
+read -p "Press any key to check existing tables..." -n 1 -s
+echo ""
+echo ""
+
+sql /nolog <<EOF
+connect -name apex_pro
+tables;
+exit
+EOF
+
+echo -e "${BLUE}We are ready to deploy our application version 1${NC}"
+echo ""
+
+echo -e "${BLUE}Moving to the project directory: /home/opc/dbcicd/my_projects/sample ${NC}"
+cd /home/opc/dbcicd/my_projects/sample
+
+echo -e "${BLUE}We will connect to the production database and deploy the artifact${NC}"
+echo -e "${BLUE}We are running the script in the same compute, so we do not need to copy or download the artifact${NC}"
+echo -e "${BLUE}  but you can use an articfact repository for CI/CD pipelines.${NC}" 
+echo ""
+echo ""
+echo -e "${GREEN}sql /nolog${NC}"
+echo -e "${GREEN}connect -name apex_pro${NC}"
+echo -e "${RED}project deploy -file artifact/sample-1.0.zip -verbose${NC}"
+echo ""
+read -p "Press any key to execute..." -n 1 -s
+echo ""
+
+sql /nolog <<EOF
+connect -name apex_pro
+SET SCAN OFF;
+project deploy -file artifact/sample-1.0.zip -verbose
+exit
+EOF
+
+echo -e "${RED}Our application should now appear in the list of APEX applications.${RED}${NC}"
+echo ""
+read -p "Press any key to list apex applications..." -n 1 -s
+echo ""
+echo ""
+
+sql /nolog <<EOF
+connect -name apex_pro
+apex list
+exit
+EOF
+
+
+echo -e "${RED}The initial application version is ready in production!!!${NC}"
+echo ""
+echo -e "${BLUE}Now, we can merge base-release branch into main${NC}"
+echo -e "${GREEN}   git checkout main${NC}"
+echo -e "${GREEN}   git merge base-release${NC}"
+echo -e "${BLUE}Optional: Delete base-release branch${NC}"
+echo -e "${GREEN}   git branch -d base-release${NC}"
+echo ""
+read -p "Press any key to execute..." -n 1 -s
+echo ""
+
+git checkout main
+git merge base-release
+git branch -d base-release
+
+echo ""
+echo -e "${BLUE}Next Steps: Create a Ticket to add new functionality${NC}"
+
+
+
