@@ -48,7 +48,7 @@ echo ""
 read -p "Press any key to confirm that the function has been created and tested.." -n 1 -s
 
 echo ""
-echo -e "${BLUE}    3-. Generate the source code and push it to the code repository${NC}"
+echo -e "${BLUE}    3-. Generate the source code and add it to the code repository${NC}"
 echo ""
 echo -e "${RED}          project export${NC}"
 echo -e "${GREEN}         git add src${NC}"
@@ -69,28 +69,10 @@ tree
 read -p "Press any key to continue..." -n 1 -s
 echo ""
 
-echo -e "${BLUE}        We will generate the changelogs and close the release before push the changes to the remote code repository${NC}"
-echo -e "${BLUE}        so no more changes will be alowed in this version we are workin on.${NC}"
-echo -e "${BLUE}        But we must wait until our changes are approved to create the artifact${NC}"
-echo ""
-echo -e "${RED}          project stage -verbose${NC}"
-echo -e "${RED}          project release -version 1.0 -verbose${NC}"
-echo ""
-read -p "Press any key to continue..." -n 1 -s
-echo ""
-
-sql -name hr_dev <<EOF
-project stage -verbose
-project release -version 1.1 -verbose
-exit
-EOF
-tree
-
-read -p "Press any key to continue..." -n 1 -s
-echo ""
 
 echo ""
-echo -e "${BLUE}       No more changes could be added to this version now, so we are ready to push them to the remote code repository and create the merge request${NC}"
+echo -e "${BLUE}       Before moving forward to generate changelogs and the artifact, we must wait for the project manager to approve the changes.${NC}"
+echo -e "${BLUE}       We will push our branch to the remote code repository and create a merge request${NC}"
 echo -e "${GREEN}           git push origin salary-increase${NC}"
 echo -e "${GREEN}           gh pr create \ ${NC}"
 echo -e "${GREEN}            --base main \ ${NC}"
@@ -132,23 +114,32 @@ while true; do
   if [[ "$STATUS" == "MERGED" ]]; then
     echo -e "${RED} Pull request #$PR_NUMBER has been merged!${NC}"
     echo ""
-    echo -e "${BLUE}Now, we can create the artifact for this version${NC}"
+    echo -e "${BLUE}We will generate the changelogs, close the release and create the artifact.${NC}"
+    echo -e "${RED}    sql -name hr_dev ${NC}"
+    echo -e "${RED}    project stage -verbose${NC}"
+    echo -e "${RED}    project release -version 1.1 -verbose${NC}"
     echo -e "${RED}    project gen-artifact -name hr -version 1.1 -format zip -verbose${NC}"
     echo ""
     read -p "Press any key to continue..." -n 1 -s
     
     sql -name hr_dev<<EOF
+project stage -verbose
+project release -version 1.1 -verbose
 project gen-artifact -name hr -version 1.1 -format zip -verbose
 exit
 EOF
     tree
     echo ""
+    echo -e "${BLUE}  A new release (1.1) has been created${NC}"
+    echo -e "${BLUE}  The stage v1.1 containing only the changes introduced in this branch compared to main.${NC}"
+    echo -e "${BLUE}  The v1.1 artifact can be use to create the complete database application from the scratch or upgrade the database application from version 1.0 to version 1.1${NC}" 
+    echo ""
     echo -e "${BLUE}We will store the artifact as a GitHub Release Asset${NC}"
-    echo -e "${GREEN}    gh release create v1.0 artifact/hr-1.1.zip --title 'Version 1.1' --notes 'Salary increase func included'${NC}"
+    echo -e "${GREEN}    gh release create v1.1 artifact/hr-1.1.zip --title 'Version 1.1' --notes 'Salary increase func included'${NC}"
     echo ""
     read -p "Press any key to continue..." -n 1 -s
 
-    gh release create v1.0 artifact/hr-1.1.zip --title "Version 1.1" --notes "Salary increase func included"
+    gh release create v1.1 artifact/hr-1.1.zip --title "Version 1.1" --notes "Salary increase func included"
 
     break
   elif [[ "$STATUS" == "CLOSED" ]]; then
