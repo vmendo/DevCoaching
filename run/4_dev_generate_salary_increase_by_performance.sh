@@ -45,7 +45,7 @@ git checkout -b salary-increase-by-performance
 
 
 echo ""
-echo -e "${BLUE}   2-. We will create the employee_perfromance table and the salary_increase procedure using our favorite database tool and test it ${NC}"
+echo -e "${BLUE}   2-. We will create the employee_performance table and the salary_increase procedure using our favorite database tool and test it ${NC}"
 read -p "Press any key to continue when ready..." -n 1 -s
 echo ""
 read -p "Press any key to confirm that table and function have been created..." -n 1 -s
@@ -72,18 +72,14 @@ tree
 read -p "Press any key to continue..." -n 1 -s
 echo ""
 
-
-read -p "Press any key to continue..." -n 1 -s
 echo ""
 
-echo ""
-
-echo -e "${BLUE}       Before moving forward to generate changelogs and the artifact, we must wait for the project manager to approve the changes.${NC}"
-echo -e "${BLUE}       We will push our branch to the remote code repository and create a merge request${NC}"
+echo -e "${BLUE}⏳ Before generating changelogs and the artifact, we need approval from the project manager.${NC}"
+echo -e "${BLUE}📤 We’ll push our branch to the remote repository and open a merge request for review.${NC}"
 echo -e "${GREEN}           git push origin salary-increase-by-performance${NC}"
 echo -e "${GREEN}           gh pr create \ ${NC}"
 echo -e "${GREEN}            --base main \ ${NC}"
-echo -e "${GREEN}            --head dev-salary-by-performance \ ${NC}"
+echo -e "${GREEN}            --head salary-increase-by-performance \ ${NC}"
 echo -e "${GREEN}            --title 'salary increase by performance (v1.1)' \${NC}"
 echo -e "${GREEN}            --body 'Implements salary raise for employees with no salary review in 2 years and considering performance in the last year.'${NC}"
 echo ""
@@ -102,7 +98,7 @@ echo ""
 read -p "Press any key to continue..." -n 1 -s
 echo ""
 
-echo -e "${BLUE}        We will wait for our branch to be merged or closed${NC}"
+echo -e "${BLUE}🔁 Waiting for the merge request to be ${GREEN}approved and merged${BLUE}, or ${RED}closed without merging${BLUE}.${NC}"
 echo ""
 
 # Get PR number
@@ -119,9 +115,9 @@ echo " Waiting for PR #$PR_NUMBER to be merged or closed..."
 while true; do
   STATUS=$(gh pr view "$PR_NUMBER" --json state --jq '.state')
   if [[ "$STATUS" == "MERGED" ]]; then
-    echo -e "${RED} Pull request #$PR_NUMBER has been merged!${NC}"
+    echo -e "${RED}✅ Pull request #$PR_NUMBER has been merged!${NC}"
     echo ""
-    echo -e "${BLUE}We will generate the changelogs, close the release and create the artifact.${NC}"
+    echo -e "${BLUE}📦 Proceeding to generate the changelogs, close the release, and create the artifact for deployment.${NC}"
     echo -e "${RED}    sql -name hr_dev ${NC}"
     echo -e "${RED}    project stage -verbose${NC}"
     echo -e "${RED}    project release -version 1.1 -verbose${NC}"
@@ -137,11 +133,13 @@ exit
 EOF
     tree
     echo ""
-    echo -e "${BLUE}  A new release (1.1) has been created${NC}"
-    echo -e "${BLUE}  The stage v1.1 containing only the changes introduced in this branch compared to main.${NC}"
-    echo -e "${BLUE}  The v1.1 artifact can be use to create the complete database application from the scratch or upgrade the database application from version 1.0 to version 1.1${NC}"
+    echo -e "${BLUE}?~_~O??~O  A new release ${GREEN}(v1.1)${BLUE} has been successfully created.${NC}"
+    echo -e "${BLUE}?~_~S~L This stage includes only the changes introduced in this branch compared to ${GREEN}main${BLUE}.${NC}"
+    echo -e "${BLUE}?~_~S? The v1.1 artifact can be used to either: ${NC}"
+    echo -e "${BLUE}   ?~_~T~A Upgrade from version 1.0 to 1.1, or${NC}"
+    echo -e "${BLUE}   ?~_~F~U Deploy the full database application from scratch.${NC}"echo ""
     echo ""
-    echo -e "${BLUE}We will store the artifact as a GitHub Release Asset${NC}"
+    echo -e "${BLUE}🚀 Storing the generated artifact as a GitHub Release Asset...${NC}"
     echo -e "${GREEN}    gh release create v1.1 artifact/hr-1.1.zip --title 'Version 1.1' --notes 'Salary increase by performance func included'${NC}"
     echo ""
     read -p "Press any key to continue..." -n 1 -s
@@ -150,7 +148,10 @@ EOF
 
     break
   elif [[ "$STATUS" == "CLOSED" ]]; then
-    echo -e "${RED} Pull request #$PR_NUMBER was closed without merging.${NC}"
+    echo -e "${RED}❌ Pull request #$PR_NUMBER has been closed without merging.${NC}"
+    echo ""
+    echo -e "${BLUE}⚠️  The changes in this branch were not approved.${NC}"
+    echo -e "${BLUE}⛔ Demo flow will stop here, as the correct version ${GREEN}v1.1${BLUE} was not promoted to main.${NC}"
     break
   else
     echo "Still open... waiting 10 seconds..."
@@ -159,8 +160,8 @@ EOF
 done
 
 
-echo -e "${BLUE}       We sync our local repository with the remote one again${NC}"
-echo -e "${BLUE}       and delete the salary-increase branch${NC}"
+echo -e "${BLUE}🔄 Syncing the local repository with the remote to reflect the latest changes...${NC}"
+echo -e "${BLUE}🌿 Then, we will delete the ${GREEN}salary-increase-by-performance${BLUE} branch locally and remotely to keep the workspace clean.${NC}"
 echo ""
 echo -e "${GREEN}      git checkout main${NC}"
 echo -e "${GREEN}      git pull origin main${NC}"

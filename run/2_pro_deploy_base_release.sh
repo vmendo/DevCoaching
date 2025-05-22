@@ -9,10 +9,11 @@ RED='\033[31m'
 GREEN='\033[32m'
 NC='\033[0m' # No color (reset)
 
-echo -e "${BLUE}Connected to production database.${NC}"
-echo -e "${BLUE}Listing current tables. It should be empty for this demo${NC}"
+echo -e "${BLUE}🔐 Connected to the production database.${NC}"
+echo -e "${BLUE}📋 Listing current tables — it should be empty for this demo.${NC}"
 echo ""
-echo -e "${BLUE}Running ${GREEN}tables; ${BLUE}connected to the production database${NC}"
+echo -e "${BLUE}📂 Running ${GREEN}tables;${BLUE} to verify schema status in production.${NC}"
+echo ""
 read -p "Press any key to check existing tables..." -n 1 -s
 echo ""
 echo ""
@@ -23,14 +24,14 @@ exit
 EOF
 
 echo ""
-echo -e "${BLUE}We are ready to deploy database application version 1.0 base_release ${NC}"
+echo -e "${BLUE}🚀 Ready to deploy database application — version 1.0 (base_release).${NC}"
 echo ""
-
-echo -e "${BLUE}Moving to the project directory: /home/opc/dbcicd/my_projects/sample ${NC}"
+echo -e "${BLUE}📁 Moving to the project directory: /home/opc/dbcicd/my_projects/hr ${NC}"
+echo ""
 cd /home/opc/DevCoaching/my_projects/hr
 
-echo -e "${BLUE}We will connect to the production database and deploy the artifact${NC}"
-echo -e "${BLUE}We are running the script in the same compute, so we do not need to copy or download the artifact${NC}"
+echo -e "${BLUE}🔗 Connecting to the production database and deploying the artifact...${NC}"
+echo -e "${BLUE}📦 Since we’re running this script on the same compute node, there’s no need to copy or download the artifact.${NC}"
 echo ""
 echo -e "${GREEN}sql -name hr_pro${NC}"
 echo -e "${RED}project deploy -file artifact/hr-1.0.zip -verbose${NC}"
@@ -44,8 +45,10 @@ project deploy -file artifact/hr-1.0.zip -verbose
 exit
 EOF
 
-echo -e "${RED}Listing the tables in the prodution database${NC}"
-echo -e "${BLUE} and showing data populated from custom code${NC}"
+echo -e "${RED}📋 Verifying deployment: listing tables in the production database...${NC}"
+echo -e "${BLUE}🔎 Displaying data populated by the custom seed scripts.${NC}"
+echo ""
+read -p "Press any key to execute..." -n 1 -s
 echo ""
 
 sql -name hr_pro <<EOF
@@ -55,10 +58,10 @@ exit
 EOF
 
 
-echo -e "${RED}The initial application version is ready in production!!!${NC}"
+echo -e "${RED}✅ The initial application version has been successfully deployed to production! 🎉${NC}"
 echo ""
-echo -e "${BLUE}Now, we can merge base-release branch into main${NC}"
-echo -e "${BLUE}We will create a merge request and wait until it is approved or deleted${NC}"
+echo -e "${BLUE}🔀 Next step: merging the base-release branch into main.${NC}"
+echo -e "${BLUE}📬 Creating a merge request and waiting for it to be approved or closed.${NC}"
 echo ""
 echo -e "${GREEN} gh pr create \${NC}"
 echo -e "${GREEN}  --base main \${NC}"
@@ -86,9 +89,10 @@ echo "⏳ Waiting for PR #$PR_NUMBER to be merged or closed..."
 while true; do
   STATUS=$(gh pr view "$PR_NUMBER" --json state --jq '.state') 
   if [[ "$STATUS" == "MERGED" ]]; then
-    echo -e "${RED}Pull request #$PR_NUMBER has been merged!${NC}"
-    echo ""
-    echo -e "${BLUE} We need to sync our local main with the remote repository, and optinally we can delete local and remote base-release branches${NC}" 
+    echo -e "${RED}✅ Pull request #$PR_NUMBER has been merged!${NC}"
+echo ""
+    echo -e "${BLUE}🔄 Now we’ll sync our local main branch with the remote repository.${NC}"
+    echo -e "${BLUE}🧹 Optionally, we can delete both the local and remote base-release branches to clean up.${NC}"
     echo -e "${GREEN}   git checkout main${NC}"
     echo -e "${GREEN}   git pull origin main${NC}"
     echo -e "${BLUE}    Optional: Delete base-release branch${NC}"
@@ -111,10 +115,9 @@ while true; do
     echo -e "${BLUE} Our remote and local repository are up-to-date and we can continue working adding new functionality${NC}"
     break
   elif [[ "$STATUS" == "CLOSED" ]]; then
-    echo -e "${RED} Pull request #$PR_NUMBER was closed without merging.${NC}"
-    echo ""
-    echo -e "${BLUE} Merge was not approved, so we clean up local branch${NC}"
-    
+    echo -e "${RED}⚠️  Merge request was closed or deleted — main does not contain the base-release changes.${NC}"
+    echo -e "${RED}⛔ Cannot continue with the demo until the base-release is merged into main.${NC}"
+ 
     if git show-ref --quiet refs/heads/"$PR_BRANCH"; then
        git branch -d "$PR_BRANCH"
     fi

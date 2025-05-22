@@ -29,9 +29,8 @@ echo ""
 echo -e "${BLUE}Moving to the project directory: /home/opc/dbcicd/my_projects/sample ${NC}"
 cd /home/opc/DevCoaching/my_projects/hr
 
-echo -e "${BLUE}We will connect to the production database and deploy the artifact${NC}"
-echo -e "${BLUE}We are running the script in the same compute, so we do not need to copy or download the artifact${NC}"
-echo ""
+echo -e "${BLUE}?~_~T~P Connected to the production database and deploying database application version 1.1.${NC}"
+echo ""echo ""
 echo -e "${GREEN}sql -name hr_pro${NC}"
 echo -e "${RED}project deploy -file artifact/hr-1.1.zip -verbose${NC}"
 echo ""
@@ -44,8 +43,7 @@ project deploy -file artifact/hr-1.1.zip -verbose
 exit
 EOF
 
-echo -e "${RED}Listing the tables in the prodution database${NC}"
-echo -e "${BLUE} and showing data populated from custom code${NC}"
+echo -e "${RED}?~_~S~K Verifying deployment: listing tables in the production database...${NC}"
 echo ""
 
 sql -name hr_pro <<EOF
@@ -54,7 +52,7 @@ exit
 EOF
 
 
-echo -e "${RED}Salay Increase functionality has been added to  production!!!${NC}"
+echo -e "${RED}?~\~E Salay Increase functionality has been successfully deployed to production! ?~_~N~I${NC}"
     
 git checkout main
 git pull origin main

@@ -31,7 +31,7 @@ echo -e "${BLUE}Cleaning up DEV database objects (custom only)...${NC}"
 sql -name "$DEV_DB_ALIAS" <<EOF
 WHENEVER SQLERROR CONTINUE
 BEGIN
-  EXECUTE IMMEDIATE 'DROP FUNCTION salary_increase';
+  EXECUTE IMMEDIATE 'DROP PROCEDURE salary_increase';
 EXCEPTION WHEN OTHERS THEN NULL;
 END;
 /
@@ -51,11 +51,20 @@ sql -name "$PROD_DB_ALIAS" <<EOF
 SET SERVEROUTPUT ON
 BEGIN
   FOR rec IN (
-    SELECT object_type, object_name FROM user_objects
-    WHERE object_type IN ('TABLE', 'VIEW', 'SEQUENCE', 'PROCEDURE', 'FUNCTION', 'PACKAGE', 'INDEX', 'TRIGGER')
+    SELECT object_type, object_name
+    FROM user_objects
+    WHERE object_type IN (
+      'TABLE', 'VIEW', 'SEQUENCE', 'PROCEDURE', 'FUNCTION', 'PACKAGE', 'INDEX', 'TRIGGER'
+    )
+    AND (object_type != 'SEQUENCE' OR object_name NOT LIKE 'ISEQ\$\$_%')
   ) LOOP
     BEGIN
-      EXECUTE IMMEDIATE 'DROP ' || rec.object_type || ' "' || rec.object_name || '"';
+      DBMS_OUTPUT.PUT_LINE('Dropping ' || rec.object_type || ' ' || rec.object_name);
+      IF rec.object_type = 'TABLE' THEN
+        EXECUTE IMMEDIATE 'DROP TABLE ' || rec.object_name || ' CASCADE CONSTRAINTS PURGE';
+      ELSE
+        EXECUTE IMMEDIATE 'DROP ' || rec.object_type || ' ' || rec.object_name;
+      END IF;
     EXCEPTION WHEN OTHERS THEN
       DBMS_OUTPUT.PUT_LINE('Skipped ' || rec.object_type || ' ' || rec.object_name || ': ' || SQLERRM);
     END;
@@ -89,7 +98,7 @@ done
 echo "⚙️  Reinitializing main branch with empty commit"
 TEMP_DIR=$(mktemp -d)
 cd "$TEMP_DIR"
-git init
+git init --initial-branch=main
 git checkout -b main
 echo "# Empty reset on $(date)" > README.md
 git add README.md
@@ -101,4 +110,3 @@ cd ~
 echo -e "${GREEN}✔ GitHub repo is now clean and reset (only main branch, one README.md).${NC}"
 
 echo -e "${BLUE}✅ DEMO CLEANUP COMPLETE${NC}"
-
