@@ -50,10 +50,10 @@ read -p "Press any key to continue when ready..." -n 1 -s
 echo ""
 read -p "Press any key to confirm that table and function have been created..." -n 1 -s
 
-echo ""
 echo -e "${BLUE}        Generate the source code and push it to the code repository${NC}"
+echo -e "${BLUE}        But we will set the object names we have added/modified to speed up the process${NC}"
 echo ""
-echo -e "${RED}          project export${NC}"
+echo -e "${RED}          project export -o HR.employee_performance,HR.fk_perf_employee,fk_perf_evaluator,HR.salary_increase${NC}"
 echo -e "${GREEN}         git add src${NC}"
 echo -e "${GREEN}         git commit -m 'feat: pay rise for employees by performance but only those without revision for two years'${NC}"
 echo ""
