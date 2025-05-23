@@ -49,7 +49,6 @@ echo -e "${BLUE}🔗 Setting up wallet for dev2 connection...${NC}"
 export TNS_ADMIN="$WALLET_DIR"
 
 echo -e "${BLUE}📤 Deploying artifact to Developer 2 database using SQLcl project...${NC}"
-cd hr-1.0
 
 sql -name "$DB_CONN_ALIAS" <<EOF
 SET SCAN OFF;

@@ -129,11 +129,11 @@ EOF
     echo -e "${BLUE}   🆕 Deploy the full database application from scratch.${NC}"
     echo ""
     echo -e "${BLUE}🚀 Storing the generated artifact as a GitHub Release Asset...${NC}"
-    echo -e "${GREEN}    gh release create v1.0 artifact/hr-1.1.zip --title 'Version 1.1' --notes 'Salary increase func included'${NC}"
+    echo -e "${GREEN}    gh release create v1.1 artifact/hr-1.1.zip --title 'Version 1.1' --notes 'Salary increase func included'${NC}"
     echo ""
     read -p "Press any key to continue..." -n 1 -s
 
-    gh release create v1.0 artifact/hr-1.1.zip --title "Version 1.1" --notes "Salary increase func included"
+    gh release create v1.1 artifact/hr-1.1.zip --title "Version 1.1" --notes "Salary increase func included"
 
     break
   elif [[ "$STATUS" == "CLOSED" ]]; then

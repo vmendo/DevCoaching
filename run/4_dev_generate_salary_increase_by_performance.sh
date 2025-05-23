@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/dev
+export TNS_ADMIN=/home/opc/DevCoaching/wallet/dev2
 
 # Define colors
 BLUE='\033[34m'
@@ -60,7 +60,7 @@ echo ""
 read -p "Press any key to continue..." -n 1 -s
 echo ""
 
-sql -name hr_dev <<EOF
+sql -name hr_dev2 <<EOF
 project export
 exit
 EOF
@@ -118,14 +118,14 @@ while true; do
     echo -e "${RED}✅ Pull request #$PR_NUMBER has been merged!${NC}"
     echo ""
     echo -e "${BLUE}📦 Proceeding to generate the changelogs, close the release, and create the artifact for deployment.${NC}"
-    echo -e "${RED}    sql -name hr_dev ${NC}"
+    echo -e "${RED}    sql -name hr_dev2 ${NC}"
     echo -e "${RED}    project stage -verbose${NC}"
     echo -e "${RED}    project release -version 1.1 -verbose${NC}"
     echo -e "${RED}    project gen-artifact -name hr -version 1.1 -format zip -verbose${NC}"
     echo ""
     read -p "Press any key to continue..." -n 1 -s
 
-    sql -name hr_dev<<EOF
+    sql -name hr_dev2<<EOF
 project stage -verbose
 project release -version 1.1 -verbose
 project gen-artifact -name hr -version 1.1 -format zip -verbose
