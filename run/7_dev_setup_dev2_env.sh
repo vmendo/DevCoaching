@@ -36,7 +36,7 @@ fi
 cd hr
 
 echo -e "${BLUE}📥 Downloading artifact ${ARTIFACT_NAME} from GitHub release...${NC}"
-gh release download v1.0 --pattern "$ARTIFACT_NAME" --dir .
+gh release download v1.0 --pattern "$ARTIFACT_NAME" --dir artifact/.
 
 if [[ $? -eq 0 ]]; then
     echo -e "${GREEN}✅ Artifact downloaded successfully.${NC}"
