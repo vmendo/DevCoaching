@@ -1,5 +1,6 @@
 # Ignore all files under wallet/
 wallet/**
+my_projects/**
 
 # But keep the folder structure
 !wallet/
@@ -7,3 +8,5 @@ wallet/**
 !wallet/pro/
 !wallet/dev/.gitkeep
 !wallet/pro/.gitkeep
+!my_projects/.gitkeep
+
