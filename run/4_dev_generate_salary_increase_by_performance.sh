@@ -61,7 +61,7 @@ read -p "Press any key to continue..." -n 1 -s
 echo ""
 
 sql -name hr_dev2 <<EOF
-project export
+project export -o HR.employee_performance,HR.fk_perf_employee,fk_perf_evaluator,HR.salary_increase 
 exit
 EOF
 
