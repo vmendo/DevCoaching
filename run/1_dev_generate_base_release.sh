@@ -130,7 +130,7 @@ echo ""
 echo -e "${BLUE}🛠️ Step 4: Adding custom code that we want to execute in production.${NC}"
 echo -e "${BLUE}📊 In this demo, we’ll include SQL scripts to insert sample data into our tables.${NC}"
 echo -e "${BLUE}➕ We’ll use the 'project stage add-custom' command to register these scripts.${NC}"
-echo -e "${RED}    project stage add-custom -file-name eba_demo_file_projects_data.sql${NC}"
+echo -e "${RED}    project stage add-custom -file-name populate_tables_with_demo_data.sql${NC}"
 echo ""
 read -p "Press any key to execute..."  -n 1 -s
 echo ""

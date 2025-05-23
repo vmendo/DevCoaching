@@ -79,7 +79,7 @@ git push origin salary-increase
 gh pr create \
   --base main \
   --head salary-increase \
-  --title "salary increase by performance (v1.1)" \
+  --title "salary increase (v1.1)" \
   --body "Implements salary raise for employees with no salary review in 2 years"
 
 
