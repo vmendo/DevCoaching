@@ -8,7 +8,7 @@
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT_DIR="${BASE_DIR}/my_projects/hr"
 WALLET_DIR="${BASE_DIR}/wallet/dev2"
-REPO_URL="https://github.com/vmendo/my_hr_demo.git"
+REPO_URL="git@github.com:vmendo/my_hr_demo.git"
 ARTIFACT_NAME="hr-1.0.zip"
 DB_CONN_ALIAS="hr_dev2"
 
