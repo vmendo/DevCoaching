@@ -19,6 +19,11 @@ NC='\033[0m'
 
 # --- Header ---
 echo -e "${BLUE}🧹 Starting full demo cleanup...${NC}"
+echo -e "${BLUE}THIS WILL CLEAN DEV1 and PRO...${NC}"
+echo ""
+read -p "Press any key to confirm..." -n 1 -s
+echo ""
+
 
 # --- Remove project directory ---
 echo -e "${BLUE}Deleting local project directory: $DEV_PROJECT_DIR${NC}"
