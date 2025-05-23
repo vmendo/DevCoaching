@@ -3,7 +3,7 @@
 # Set Oracle Wallet Location (if needed)
 export TNS_ADMIN=/home/oracle/DevCoaching/wallet/dev2
 
-# Define colors
+# Define colors for comments
 BLUE='\033[34m'
 RED='\033[31m'
 GREEN='\033[32m'
