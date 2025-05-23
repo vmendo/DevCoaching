@@ -30,7 +30,7 @@ echo -e "${BLUE}Moving to the project directory: /home/opc/dbcicd/my_projects/sa
 cd /home/opc/DevCoaching/my_projects/hr
 
 echo -e "${BLUE}?~_~T~P Connected to the production database and deploying database application version 1.1.${NC}"
-echo ""echo ""
+echo ""
 echo -e "${GREEN}sql -name hr_pro${NC}"
 echo -e "${RED}project deploy -file artifact/hr-1.1.zip -verbose${NC}"
 echo ""
