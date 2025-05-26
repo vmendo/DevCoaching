@@ -29,7 +29,17 @@ echo ""
 echo -e "${BLUE}Moving to the project directory: /home/opc/dbcicd/my_projects/sample ${NC}"
 cd /home/opc/DevCoaching/my_projects/hr
 
-echo -e "${BLUE}?~_~T~P Connected to the production database and deploying database application version 1.1.${NC}"
+# Check and download artifact if not present
+if [ ! -f "artifact/hr-1.1.zip" ]; then
+  echo -e "${BLUE}📦 Artifact hr-1.1.zip not found. Downloading from GitHub release...${NC}"
+  cd artifact
+  gh release download v1.1 --pattern "hr-1.1.zip" --dir .
+  cd ..
+else
+  echo -e "${GREEN}✅ Artifact hr-1.1.zip already exists. Skipping download.${NC}"
+fi
+
+echo -e "${BLUE}?~_~T~P Connecting to the production database and deploying database application version 1.1.${NC}"
 echo ""
 echo -e "${GREEN}sql -name hr_pro${NC}"
 echo -e "${RED}project deploy -file artifact/hr-1.1.zip -verbose${NC}"
