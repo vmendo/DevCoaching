@@ -45,6 +45,14 @@ else
     exit 1
 fi
 
+echo ""
+echo -e "${RED}If you got any timeout, please, execute:${NC}"
+echo -e "${BLUE}gh release download v1.0 --pattern "$ARTIFACT_NAME" --dir artifact/.${NC}"
+echo -e "${RED}from /home/oracle/DevCoaching in another terminal window${NC}"
+echo ""
+read -p "Press any key to execute if the artifact is ready..." -n 1 -s
+echo ""
+
 echo -e "${BLUE}🔗 Setting up wallet for dev2 connection...${NC}"
 export TNS_ADMIN="$WALLET_DIR"
 
