@@ -5,7 +5,8 @@
 # ===============================
 
 # --- Config ---
-DEV_PROJECT_DIR="/home/oracle/DevCoaching/my_projects/hr"
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+DEV_PROJECT_DIR="$DEMO_HOME/my_projects/hr"
 GITHUB_USER="vmendo"
 GITHUB_REPO="my_hr_demo"
 DEV2_DB_ALIAS="hr_dev2"
@@ -30,7 +31,7 @@ rm -rf "$DEV_PROJECT_DIR"
 echo -e "${GREEN}✔ Local project directory removed.${NC}"
 
 # --- Drop ALL objects in developer 2 database schema ---
-export TNS_ADMIN=/home/oracle/DevCoaching/wallet/dev2
+export TNS_ADMIN=$DEMO_HOME/wallet/dev2
 echo -e "${RED}⚠ Dropping ALL objects in the hr_dev2 schema...${NC}"
 sql -name "$DEV2_DB_ALIAS" <<EOF
 SET SERVEROUTPUT ON

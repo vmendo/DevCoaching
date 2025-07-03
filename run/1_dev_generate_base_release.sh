@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/dev
+# Set DEMO_HOME to avoid full path 
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
 
+# Set Oracle Wallet Location
+export TNS_ADMIN="$DEMO_HOME/wallet/dev"
+
+# THIS SCRIPT IS FOR DEMO PROPOSALS SO IT CONTAINS COMMENTS FOR EACH STEP
+# We will set some colors for comments
 # Define colors
 BLUE='\033[34m'
 RED='\033[31m'
@@ -10,14 +15,14 @@ GREEN='\033[32m'
 NC='\033[0m' # No color (reset)
 
 # Check if the project folder already exists
-if [ -d "/home/opc/DevCoaching/my_projects/hr" ]; then
-    echo -e "${RED}ERROR: The folder /home/opc/DevCoaching/my_projects/hr already exists!${NC}"
-    echo -e "${RED}Please remove it manually.${NC}"
+if [ -d "../my_projects/hr" ]; then
+    echo -e "${RED}ERROR: The folder $DEMO_HOME/my_projects/hr already exists!${NC}"
+    echo -e "${RED}Please remove it manually, and run the script again ${NC}"
     exit 1
 fi
 
-echo -e "${BLUE}📁 Moving to the project directory: /home/opc/DevCoaching/my_projects ${NC}"
-cd /home/opc/DevCoaching/my_projects/
+echo -e "${BLUE}📁 Moving to the project directory: $DEMO_HOME/my_projects${NC}"
+cd $DEMO_HOME/my_projects/
 
 echo -e "${BLUE}⚙️  Initializing the project...${NC}"
 echo -e "${GREEN}sql /nolog${NC}"
@@ -31,7 +36,7 @@ project init -name hr -schemas HR -makeroot
 exit
 EOF
 
-echo -e "${BLUE}📂 Entering the newly created project folder: /home/opc/DevCoaching/my_projects/hr ${NC}"
+echo -e "${BLUE}📂 Entering the newly created project folder: $DEMO_HOME/my_projects/hr ${NC}"
 cd hr
 
 echo -e "${BLUE}🧾 Displaying project folder structure...${NC}"
@@ -42,14 +47,14 @@ echo ""
 
 echo -e "${BLUE}🧩 SQL Projects use filters to manage database objects to be included in this project${NC}"
 echo -e "${BLUE}📝 You can edit the project.filters file to exclude grants from the export${NC}"
-echo -e "${BLUE}📄   Path: /home/opc/DevCoaching/my_projects/hr/.dbtools/filters/project.filters${NC}"
+echo -e "${BLUE}📄   Path: $DEMO_HOME/my_projects/hr/.dbtools/filters/project.filters${NC}"
 echo -e "${RED}🔧   - Tip: Uncomment the line → export_type not in ... USER_SYS_PRIVS${NC}"
 
 read -p "Press any key to continue after making the changes..." -n 1 -s
 echo ""
 
-rm /home/opc/DevCoaching/my_projects/hr/.dbtools/filters/project.filters
-cp /home/opc/DevCoaching/aux/project.filters /home/opc/DevCoaching/my_projects/hr/.dbtools/filters/project.filters
+rm $DEMO_HOME/my_projects/hr/.dbtools/filters/project.filters
+cp $DEMO_HOME/aux/project.filters $DEMO_HOME/my_projects/hr/.dbtools/filters/project.filters
 
 echo -e "${BLUE}🌐 We will use GitHub as our code repository.${NC}"
 echo -e "${BLUE}📦 Initializing Git repository, adding the project files, and committing changes...${NC}"
@@ -150,9 +155,9 @@ echo ""
 read -p "Press any key to execute..."  -n 1 -s
 echo ""
 
-cd /home/opc/DevCoaching/aux/custom 
+cd $DEMO_HOME/aux/custom
 ./append_base_release_sql_files.sh
-cd /home/opc/DevCoaching/my_projects/hr
+cd $DEMO_HOME/my_projects/hr
 
 echo -e "${BLUE}✅ The  file now contain the SQL code to populate the application tables and the Liquibase annotations.${NC}"
 echo ""

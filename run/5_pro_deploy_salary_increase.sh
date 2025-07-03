@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/pro
+# Set DEMO_HOME to avoid full path 
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Set Oracle Wallet Location
+export TNS_ADMIN="$DEMO_HOME/wallet/pro"
 
 # Define colors
 BLUE='\033[34m'
@@ -9,10 +12,10 @@ RED='\033[31m'
 GREEN='\033[32m'
 NC='\033[0m' # No color (reset)
 
-echo -e "${BLUE}Connected to production database.${NC}"
-echo -e "${BLUE}Listing current tables. We should have the initial data model, where employee_performance is not here${NC}"
+echo -e "${BLUE}🔐 Connected to production database.${NC}"
+echo -e "${BLUE}📋 Listing current tables. We should have the initial data model, where employee_performance is not here${NC}"
 echo ""
-echo -e "${BLUE}Running ${GREEN}tables; ${BLUE}connected to the production database${NC}"
+echo -e "${BLUE}📂 Running ${GREEN}tables; ${BLUE}connected to the production database${NC}"
 read -p "Press any key to check existing tables..." -n 1 -s
 echo ""
 echo ""
@@ -23,11 +26,11 @@ exit
 EOF
 
 echo ""
-echo -e "${BLUE}We are ready to deploy database application version 1.1 base_release ${NC}"
+echo -e "${BLUE}🚀 We are ready to deploy database application version 1.1 base_release ${NC}"
 echo ""
 
-echo -e "${BLUE}Moving to the project directory: /home/opc/dbcicd/my_projects/sample ${NC}"
-cd /home/opc/DevCoaching/my_projects/hr
+echo -e "${BLUE}📁 Moving to the project directory: $DEMO_HOME/my_projects/sample ${NC}"
+cd $DEMO_HOME/my_projects/hr
 
 # Check and download artifact if not present
 if [ ! -f "artifact/hr-1.1.zip" ]; then
@@ -39,7 +42,7 @@ else
   echo -e "${GREEN}✅ Artifact hr-1.1.zip already exists. Skipping download.${NC}"
 fi
 
-echo -e "${BLUE}?~_~T~P Connecting to the production database and deploying database application version 1.1.${NC}"
+echo -e "${BLUE}🔐 Connecting to the production database and deploying database application version 1.1.${NC}"
 echo ""
 echo -e "${GREEN}sql -name hr_pro${NC}"
 echo -e "${RED}project deploy -file artifact/hr-1.1.zip -verbose${NC}"
@@ -53,7 +56,7 @@ project deploy -file artifact/hr-1.1.zip -verbose
 exit
 EOF
 
-echo -e "${RED}?~_~S~K Verifying deployment: listing tables in the production database...${NC}"
+echo -e "${RED}📋 Verifying deployment: listing tables in the production database...${NC}"
 echo ""
 
 sql -name hr_pro <<EOF
@@ -62,7 +65,7 @@ exit
 EOF
 
 
-echo -e "${RED}?~\~E Salay Increase functionality has been successfully deployed to production! ?~_~N~I${NC}"
+echo -e "${RED}✅ Salay Increase functionality has been successfully deployed to production! 🎉${NC}"
     
 git checkout main
 git pull origin main

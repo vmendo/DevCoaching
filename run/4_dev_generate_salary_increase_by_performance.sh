@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/oracle/DevCoaching/wallet/dev2
+# Set DEMO_HOME to avoid full path 
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Set Oracle Wallet Location
+export TNS_ADMIN="$DEMO_HOME/wallet/dev2"
+
 
 # Define colors for comments
 BLUE='\033[34m'
@@ -9,7 +13,7 @@ RED='\033[31m'
 GREEN='\033[32m'
 NC='\033[0m' # No color (reset)
 
-cd /home/oracle/DevCoaching/my_projects/hr
+cd $DEMO_HOMEg/my_projects/hr
 echo -e "${BLUE}🗣️🚪 During a quick elevator chat, our manager added a detail he forgot: the salary increase should depend on employee performance.${NC}"
 echo -e "${BLUE}?🧠📊 So now we need to create an evaluation process, and only employees rated above 3 out of 5${NC}"
 echo -e "${BLUE}?— and without a salary review in the last 2 years${NC}"

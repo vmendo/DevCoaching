@@ -5,7 +5,8 @@
 # ===============================
 
 # --- Config ---
-DEV_PROJECT_DIR="/home/opc/DevCoaching/my_projects/hr"
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+DEV_PROJECT_DIR="$DEMO_HOME/my_projects/hr"
 GITHUB_USER="vmendo"
 GITHUB_REPO="my_hr_demo"
 DEV_DB_ALIAS="hr_dev"
@@ -31,7 +32,7 @@ rm -rf "$DEV_PROJECT_DIR"
 echo -e "${GREEN}✔ Local project directory removed.${NC}"
 
 # --- Drop only custom dev objects ---
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/dev
+export TNS_ADMIN=$DEMO_HOME/wallet/dev
 echo -e "${BLUE}Cleaning up DEV database objects (custom only)...${NC}"
 sql -name "$DEV_DB_ALIAS" <<EOF
 WHENEVER SQLERROR CONTINUE
@@ -50,7 +51,7 @@ EOF
 echo -e "${GREEN}✔ Dev database cleanup complete.${NC}"
 
 # --- Drop ALL objects in production schema ---
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/pro
+export TNS_ADMIN=$DEMO_HOME/wallet/pro
 echo -e "${RED}⚠ Dropping ALL objects in the hr_prod schema...${NC}"
 sql -name "$PROD_DB_ALIAS" <<EOF
 SET SERVEROUTPUT ON

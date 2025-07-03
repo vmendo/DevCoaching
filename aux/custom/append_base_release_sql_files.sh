@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Define source and target directories
-SOURCE_DIR="/home/opc/DevCoaching/aux/custom/base_release"
-TARGET_DIR="/home/opc/DevCoaching/my_projects/hr/dist/releases/next/changes/base-release/_custom"
+export DEMO_HOME="$(cd "$(dirname "$0")/../.." && pwd)"
+SOURCE_DIR="$DEMO_HOME/aux/custom/base_release"
+TARGET_DIR="$DEMO_HOME/my_projects/hr/dist/releases/next/changes/base-release/_custom"
 
 # List of SQL files to append
 FILES=("populate_tables_with_demo_data.sql")

@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/pro
+# Set DEMO_HOME to avoid full path 
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Set Oracle Wallet Location
+export TNS_ADMIN="$DEMO_HOME/wallet/pro"
+
 
 # Define colors
 BLUE='\033[34m'
@@ -26,9 +30,9 @@ EOF
 echo ""
 echo -e "${BLUE}🚀 Ready to deploy database application — version 1.0 (base_release).${NC}"
 echo ""
-echo -e "${BLUE}📁 Moving to the project directory: /home/opc/dbcicd/my_projects/hr ${NC}"
+echo -e "${BLUE}📁 Moving to the project directory: $DEMO_HOME/my_projects/hr ${NC}"
 echo ""
-cd /home/opc/DevCoaching/my_projects/hr
+cd $DEMO_HOME/my_projects/hr
 
 echo -e "${BLUE}🔗 Connecting to the production database and deploying the artifact...${NC}"
 echo -e "${BLUE}📦 Since we’re running this script on the same compute node, there’s no need to copy or download the artifact.${NC}"

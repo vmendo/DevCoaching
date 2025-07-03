@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/dev
+# Set DEMO_HOME to avoid full path 
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Set Oracle Wallet Location
+export TNS_ADMIN="$DEMO_HOME/wallet/dev"
 
 # Define colors
 BLUE='\033[34m'
@@ -9,7 +12,7 @@ RED='\033[31m'
 GREEN='\033[32m'
 NC='\033[0m' # No color (reset)
 
-cd /home/opc/DevCoaching/my_projects/hr
+cd $DEMO_HOME/my_projects/hr
 echo -e "${BLUE}🆕💼 Now we are starting a new feature request: Our manager has asked us to create a procedure that 📈 increases salaries${NC}" 
 echo -e "${BLUE} for employees who haven't received a salary review in the past 2 years.${NC}"
 

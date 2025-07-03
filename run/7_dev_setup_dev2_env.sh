@@ -5,7 +5,7 @@
 # ============================================
 
 # Define variables
-BASE_DIR="/home/oracle/DevCoaching"
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT_DIR="${BASE_DIR}/my_projects/hr"
 WALLET_DIR="${BASE_DIR}/wallet/dev2"
 REPO_URL="git@github.com:vmendo/my_hr_demo.git"

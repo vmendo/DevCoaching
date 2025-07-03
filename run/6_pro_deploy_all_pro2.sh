@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Set Oracle Wallet Location (if needed)
-export TNS_ADMIN=/home/opc/DevCoaching/wallet/pro2
+# Set DEMO_HOME to avoid full path 
+export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Set Oracle Wallet Location
+export TNS_ADMIN="$DEMO_HOME/wallet/pro2"
 
 # Define colors
 BLUE='\033[34m'
