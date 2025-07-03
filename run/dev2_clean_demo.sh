@@ -4,11 +4,10 @@
 # DEMO CLEAN-UP SCRIPT
 # ===============================
 
+source "$(dirname "$0")/0_setup_env.sh"
+
 # --- Config ---
-export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
 DEV_PROJECT_DIR="$DEMO_HOME/my_projects/hr"
-GITHUB_USER="vmendo"
-GITHUB_REPO="my_hr_demo"
 DEV2_DB_ALIAS="hr_dev2"
 
 # --- Colors ---

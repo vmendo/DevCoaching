@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Set DEMO_HOME to avoid full path 
-export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+source "$(dirname "$0")/0_setup_env.sh"
 
 # Set Oracle Wallet Location
 export TNS_ADMIN="$DEMO_HOME/wallet/dev2"

@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # Set DEMO_HOME to avoid full path 
-export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+# export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+
+source "$(dirname "$0")/0_setup_env.sh"
+
+
+echo "DEMO_HOME: $DEMO_HOME"
+echo "GITHUB_URL: $GITHUB_URL"
 
 # Set Oracle Wallet Location
 export TNS_ADMIN="$DEMO_HOME/wallet/dev"
@@ -63,7 +69,7 @@ echo -e "${GREEN}    git add .${NC}"
 echo -e "${GREEN}    git commit -m 'chore: initializing repository with default project files'${NC}"
 echo ""
 echo -e "${BLUE}🚀 Pushing changes to the remote repository on GitHub...${NC}"
-echo -e "${GREEN}    git remote add origin https://github.com/vmendo/my_hr_demo.git'${NC}"
+echo -e "${GREEN}    git remote add origin $GITHUB_URL'${NC}"
 echo -e "${GREEN}    git push -u origin main'${NC}"
 echo ""
 read -p "Press any key to run the commands"  -n 1 -s
@@ -74,7 +80,7 @@ git add .
 git commit -m "chore: initializing repository with default project files"
 
 
-git remote add origin https://github.com/vmendo/my_hr_demo.git
+git remote add origin $GITHUB_URL
 git push -u origin main --force
 
 echo -e "${BLUE}✅ The project structure has been committed to the code repository. Next steps:${NC}" 

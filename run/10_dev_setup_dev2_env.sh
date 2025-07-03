@@ -4,11 +4,11 @@
 #     Developer 2 Environment Setup Script
 # ============================================
 
+source "$(dirname "$0")/0_setup_env.sh"
+
 # Define variables
-BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT_DIR="${BASE_DIR}/my_projects/hr"
-WALLET_DIR="${BASE_DIR}/wallet/dev2"
-REPO_URL="git@github.com:vmendo/my_hr_demo.git"
+PROJECT_DIR="${DEMO_HOME}/my_projects/hr"
+WALLET_DIR="${DEMO_HOME}/wallet/dev2"
 ARTIFACT_NAME="hr-1.0.zip"
 DB_CONN_ALIAS="hr_dev2"
 
@@ -24,7 +24,7 @@ echo -e "${BLUE}🚀 Starting Developer 2 setup...${NC}"
 cd "${BASE_DIR}/my_projects"
 
 echo -e "${BLUE}📦 Cloning the project repository into hr folder...${NC}"
-git clone "$REPO_URL" hr
+git clone "$GITHUB_URL" hr
 
 if [[ $? -eq 0 ]]; then
     echo -e "${GREEN}✅ Repository cloned successfully into ${PROJECT_DIR}${NC}"
