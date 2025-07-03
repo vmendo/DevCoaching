@@ -1,4 +1,4 @@
-# 🧪 HR Database DevOps Demo
+# 🧪 Oracle Database DevOps with SQLcl project
 
 > 💡 A hands-on demo showcasing how to manage Oracle Database projects using **SQLcl**, GitHub, and automation best practices.
 
