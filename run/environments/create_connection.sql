@@ -1,11 +1,13 @@
--- Create a new SQLcl connection
+-- Prompt and accept the connection name and connection string from the user
 ACCEPT conn_name    CHAR PROMPT 'Enter the name of the connection to be saved:'
 ACCEPT conn_string  CHAR PROMPT 'Enter the database connection string:'
-conn -savepwd -save conn_name conn_string
+
+-- Create a new SQLcl connection
+conn -savepwd -save &conn_name &conn_string
  
 --List current connections
-connmgr list
+cm list
 
-PROMPT "Press [Enter] to continue ..."
---To connect to a named connection
-PRINT "conn -name " || conn_name
+-- How to use the new connection
+PROMPT 'To connect use: conn -name &conn_name'
+
