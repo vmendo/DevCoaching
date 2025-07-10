@@ -2,6 +2,7 @@
 
 # Set DEMO_HOME to avoid full path 
 # export DEMO_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+# Adding comment to test the branch
 
 source "$(dirname "$0")/0_setup_env.sh"
 
