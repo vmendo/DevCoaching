@@ -1,6 +1,7 @@
 # Ignore all files under wallet/
 wallet/**
 my_projects/**
+.DS_Store
 
 # But keep the folder structure
 !wallet/
